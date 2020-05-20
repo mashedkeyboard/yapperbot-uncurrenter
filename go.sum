@@ -1,0 +1,14 @@
+cgt.name/pkg/go-mwclient v1.0.3 h1:ywIRG2KBMqINwct/yRH2t44djiMyIgqm0QCcRBBTqGA=
+cgt.name/pkg/go-mwclient v1.0.3/go.mod h1:sxgLqpaVbtOhM1KiAUPkkRdsE6au+E64Bq9a2GyAQdU=
+github.com/antonholmquist/jason v1.0.1-0.20180605105355-426ade25b261 h1:EhjUMUb2k4WYhEjGTMB3XmD7qf6IAmJQWPpE69sI+sI=
+github.com/antonholmquist/jason v1.0.1-0.20180605105355-426ade25b261/go.mod h1:+GxMEKI0Va2U8h3os6oiUAetHAlGMvxjdpAH/9uvUMA=
+github.com/mashedkeyboard/ybtools v0.1.0 h1:LvMP3YvbBs318K332FqR8IDDaImZ20q5a9l0BdeFy+k=
+github.com/mashedkeyboard/ybtools v0.1.0/go.mod h1:7BV0LX0+Dj+W1KZ+X1glBAh+ykd/l7tcRPn/vqWZi7E=
+github.com/mashedkeyboard/ybtools v0.1.2 h1:gF4ihc9ZqZYRV8oTDBo8sn42QsPzQBvPzUs47+K72Mg=
+github.com/mashedkeyboard/ybtools v0.1.2/go.mod h1:7BV0LX0+Dj+W1KZ+X1glBAh+ykd/l7tcRPn/vqWZi7E=
+github.com/mashedkeyboard/ybtools v0.1.3 h1:hafS76c37GUdQ3SljJ6nhXqR85kyJEo6V6EbhBpn8HY=
+github.com/mashedkeyboard/ybtools v0.1.3/go.mod h1:7BV0LX0+Dj+W1KZ+X1glBAh+ykd/l7tcRPn/vqWZi7E=
+github.com/mashedkeyboard/ybtools v0.1.4 h1:ykbbV2OZrXLkekOP+NUtN3daQ4HcMuMXaZ2FKVOPQvI=
+github.com/mashedkeyboard/ybtools v0.1.4/go.mod h1:7BV0LX0+Dj+W1KZ+X1glBAh+ykd/l7tcRPn/vqWZi7E=
+github.com/mrjones/oauth v0.0.0-20190623134757-126b35219450 h1:j2kD3MT1z4PXCiUllUJF9mWUESr9TWKS7iEKsQ/IipM=
+github.com/mrjones/oauth v0.0.0-20190623134757-126b35219450/go.mod h1:skjdDftzkFALcuGzYSklqYd8gvat6F1gZJ4YPVbkZpM=
