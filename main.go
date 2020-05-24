@@ -20,7 +20,6 @@ package main
 
 import (
 	"log"
-	"os"
 	"regexp"
 	"time"
 
@@ -29,26 +28,15 @@ import (
 	"github.com/mashedkeyboard/ybtools"
 )
 
-const botName string = "Yapperbot"
-
 var currentTemplateRegex *regexp.Regexp
 
 func main() {
-	var w *mwclient.Client
-	var err error
+	ybtools.SetupBot("Uncurrenter", "Yapperbot")
+	defer ybtools.SaveEditLimit()
 
-	ybtools.SetupBot(botName)
 	currentTemplateRegex = regexp.MustCompile(`(?i){{current(?:{{[^}{]*}}|[^}{]*)*}}\n?`)
 
-	w, err = mwclient.New(os.Getenv("WP_BOT_ENDPOINT"), "Uncurrenter v1")
-	if err != nil {
-		log.Fatal("Failed to create MediaWiki client with error ", err)
-	}
-
-	err = w.Login(os.Getenv("WP_BOT_USERNAME"), os.Getenv("WP_BOT_PASSWORD"))
-	if err != nil {
-		log.Fatal("Failed to authenticate with MediaWiki with error ", err)
-	}
+	w := ybtools.CreateAndAuthenticateClient()
 
 	parameters := params.Values{
 		"action":         "query",
@@ -95,7 +83,7 @@ func main() {
 				}
 
 				// if it's been more than five hours since the last edit, and we can edit it
-				if time.Now().Sub(lastTimestampProcessed).Hours() > 5 && ybtools.BotAllowed(pageContent) {
+				if time.Now().Sub(lastTimestampProcessed).Hours() > 5 && ybtools.BotAllowed(pageContent) && ybtools.EditLimit() {
 					newPageContent := currentTemplateRegex.ReplaceAllString(pageContent, "")
 					err = w.Edit(params.Values{
 						"title":    pageTitle,
