@@ -34,7 +34,7 @@ func main() {
 	ybtools.SetupBot("Uncurrenter", "Yapperbot")
 	defer ybtools.SaveEditLimit()
 
-	currentTemplateRegex = regexp.MustCompile(`(?i){{current(?:{{[^}{]*}}|[^}{]*)*}}\n?`)
+	currentTemplateRegex = regexp.MustCompile(`(?i){{current *(?:\|(?:{{[^}{]*}}|[^}{]*)*|)}}\n?`)
 
 	w := ybtools.CreateAndAuthenticateClient()
 
