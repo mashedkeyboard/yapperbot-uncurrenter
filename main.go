@@ -83,7 +83,7 @@ func main() {
 				}
 
 				// if it's been more than five hours since the last edit, and we can edit it
-				if time.Now().Sub(lastTimestampProcessed).Hours() > 5 && ybtools.BotAllowed(pageContent) && ybtools.EditLimit() {
+				if time.Now().Sub(lastTimestampProcessed).Hours() > 5 && ybtools.BotAllowed(pageContent) && ybtools.CanEdit() {
 					newPageContent := currentTemplateRegex.ReplaceAllString(pageContent, "")
 					err = w.Edit(params.Values{
 						"title":    pageTitle,
@@ -101,10 +101,10 @@ func main() {
 								log.Println("Edit conflicted on page", pageTitle, "assuming it's still active and skipping")
 								continue
 							} else {
-								log.Fatal("API error raised, can't handle, so failing. Error was ", err)
+								ybtools.PanicErr("API error raised, can't handle, so failing. Error was ", err)
 							}
 						default:
-							log.Fatal("Non-API error raised, can't handle, so failing. Error was ", err)
+							ybtools.PanicErr("Non-API error raised, can't handle, so failing. Error was ", err)
 						}
 					}
 				}
