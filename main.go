@@ -85,6 +85,11 @@ func main() {
 				// if it's been more than five hours since the last edit, and we can edit it
 				if time.Now().Sub(lastTimestampProcessed).Hours() > 5 && ybtools.BotAllowed(pageContent) && ybtools.CanEdit() {
 					newPageContent := currentTemplateRegex.ReplaceAllString(pageContent, "")
+					if newPageContent == pageContent {
+						log.Println("newPageContent was the same as pageContent on page", pageTitle, "so ignoring")
+						continue
+					}
+
 					err = w.Edit(params.Values{
 						"title":    pageTitle,
 						"text":     newPageContent,
