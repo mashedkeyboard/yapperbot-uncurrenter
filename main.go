@@ -21,6 +21,7 @@ package main
 import (
 	"log"
 	"regexp"
+	"strings"
 	"time"
 
 	"cgt.name/pkg/go-mwclient"
@@ -34,9 +35,39 @@ func main() {
 	ybtools.SetupBot("Uncurrenter", "Yapperbot")
 	defer ybtools.SaveEditLimit()
 
-	currentTemplateRegex = regexp.MustCompile(`(?i){{current *(?:\|(?:{{[^}{]*}}|[^}{]*)*|)}}\n?`)
-
 	w := ybtools.CreateAndAuthenticateClient()
+
+	// Check for every redirect to the {{current}} template, and include all of those - these will show
+	// as transclusions of the template, and are covered under the BRFA as they are the same template
+	queryRedirects := w.NewQuery(params.Values{
+		"action":       "query",
+		"generator":    "linkshere",
+		"titles":       "Template:Current",
+		"glhprop":      "title",
+		"glhnamespace": "10",
+		"glhshow":      "redirect",
+	})
+
+	var regexBuilder strings.Builder
+	regexBuilder.WriteString(`(?i){{(?:current`)
+
+	for queryRedirects.Next() {
+		pages := ybtools.GetPagesFromQuery(queryRedirects.Resp())
+		if len(pages) > 0 {
+			for _, page := range pages {
+				pageTitle, err := page.GetString("title")
+				if err != nil {
+					log.Println("Failed to get title from redirect page for template, so skipping it. Error was", err)
+					continue
+				}
+				regexBuilder.WriteString("|")
+				regexBuilder.WriteString(regexp.QuoteMeta(strings.TrimPrefix(pageTitle, "Template:")))
+			}
+		}
+	}
+	regexBuilder.WriteString(`) *(?:\|(?:{{[^}{]*}}|[^}{]*)*|)}}\n?`)
+
+	currentTemplateRegex = regexp.MustCompile(regexBuilder.String())
 
 	parameters := params.Values{
 		"action":         "query",
