@@ -26,16 +26,16 @@ import (
 
 	"cgt.name/pkg/go-mwclient"
 	"cgt.name/pkg/go-mwclient/params"
-	"github.com/mashedkeyboard/ybtools"
+	"github.com/mashedkeyboard/ybtools/v2"
 )
 
 var currentTemplateRegex *regexp.Regexp
 
 func main() {
-	ybtools.SetupBot("Uncurrenter", "Yapperbot")
+	ybtools.SetupBot(ybtools.BotSettings{TaskName: "Uncurrenter", BotUser: "Yapperbot"})
 	defer ybtools.SaveEditLimit()
 
-	w := ybtools.CreateAndAuthenticateClient()
+	w := ybtools.CreateAndAuthenticateClient(ybtools.DefaultMaxlag)
 
 	// Check for every redirect to the {{current}} template, and include all of those - these will show
 	// as transclusions of the template, and are covered under the BRFA as they are the same template
