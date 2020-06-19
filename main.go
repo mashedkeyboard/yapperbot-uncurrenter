@@ -19,6 +19,8 @@ package main
 //
 
 import (
+	"crypto/md5"
+	"fmt"
 	"log"
 	"regexp"
 	"strings"
@@ -124,6 +126,7 @@ func main() {
 					err = w.Edit(params.Values{
 						"title":    pageTitle,
 						"text":     newPageContent,
+						"md5":      fmt.Sprintf("%x", md5.Sum([]byte(newPageContent))),
 						"summary":  "Removing the {{current}} template as the article hasn't been edited in over five hours. Did I get this wrong? Please revert me and check my userpage!",
 						"notminor": "true",
 						"bot":      "true",
