@@ -127,7 +127,7 @@ func main() {
 						"title":    pageTitle,
 						"text":     newPageContent,
 						"md5":      fmt.Sprintf("%x", md5.Sum([]byte(newPageContent))),
-						"summary":  "Removing the {{current}} template as the article hasn't been edited in over five hours. Did I get this wrong? Please revert me and check my userpage!",
+						"summary":  "Auto-removing {{current}} - no edits in 5hrs+. The event may still be current, but [[Template:Current|the {{current}} template is designed only for articles which many editors are editing, and is usually up for less than a day]].",
 						"notminor": "true",
 						"bot":      "true",
 					})
