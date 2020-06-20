@@ -80,11 +80,18 @@ func main() {
 		"geifilterredir": "nonredirects",
 		"rvprop":         "timestamp|content",
 		"rvslots":        "main",
+		"curtimestamp":   "1",
 	}
 
 	query := w.NewQuery(parameters)
 	for query.Next() {
 		pages := ybtools.GetPagesFromQuery(query.Resp())
+
+		curTS, err := query.Resp().GetString("curtimestamp")
+		if err != nil {
+			ybtools.PanicErr("Failed to get current timestamp! Error was", err)
+		}
+
 		if len(pages) > 0 {
 			for _, page := range pages {
 				pageTitle, err := page.GetString("title")
@@ -93,17 +100,18 @@ func main() {
 					continue
 				}
 
-				pageContent, err := ybtools.GetContentFromPage(page)
-				if err != nil {
-					log.Println("Failed to get content from page", pageTitle, ", so skipping it. Error was", err)
-					continue
-				}
-
 				pageRevisions, err := page.GetObjectArray("revisions")
 				if err != nil {
 					log.Println("Failed to get revisions array from page, so skipping it. Error was", err)
 					continue
 				}
+
+				pageContent, err := ybtools.GetMainSlotFromRevision(pageRevisions[0])
+				if err != nil {
+					log.Println("Failed to get content from page", pageTitle, ", so skipping it. Error was", err)
+					continue
+				}
+
 				lastTimestamp, err := pageRevisions[0].GetString("timestamp")
 				if err != nil {
 					log.Println("Failed to get timestamp from revision, so skipping the page. Error was", err)
@@ -124,12 +132,14 @@ func main() {
 					}
 
 					err = w.Edit(params.Values{
-						"title":    pageTitle,
-						"text":     newPageContent,
-						"md5":      fmt.Sprintf("%x", md5.Sum([]byte(newPageContent))),
-						"summary":  "Auto-removing {{current}} - no edits in 5hrs+. The event may still be current, but [[Template:Current|the {{current}} template is designed only for articles which many editors are editing, and is usually up for less than a day]].",
-						"notminor": "true",
-						"bot":      "true",
+						"title":          pageTitle,
+						"text":           newPageContent,
+						"md5":            fmt.Sprintf("%x", md5.Sum([]byte(newPageContent))),
+						"summary":        "Auto-removing {{current}} - no edits in 5hrs+. The event may still be current, but [[Template:Current|the {{current}} template is designed only for articles which many editors are editing, and is usually up for less than a day]].",
+						"notminor":       "true",
+						"bot":            "true",
+						"basetimestamp":  lastTimestamp,
+						"starttimestamp": curTS,
 					})
 					if err == nil {
 						log.Println("Successfully removed current template from", pageTitle)

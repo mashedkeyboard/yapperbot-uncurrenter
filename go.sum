@@ -42,6 +42,8 @@ github.com/mashedkeyboard/ybtools v1.3.2 h1:VuOdy4awqUM7Ri/geaFSdGAphmA4hip+R1o8
 github.com/mashedkeyboard/ybtools v1.3.2/go.mod h1:SsOl78qyGTVyzDL8yRWcRfg5VgvrEroKXnV5hzbZrYw=
 github.com/mashedkeyboard/ybtools/v2 v2.0.0 h1:Lxrz5kj1i0Q+zDG3DcKhthkahNu3diIFvot4hos+uQA=
 github.com/mashedkeyboard/ybtools/v2 v2.0.0/go.mod h1:Wa2S3fUOmMHWO3y27EhASy/dRuVFMv5A2PtIjxYwAF8=
+github.com/mashedkeyboard/ybtools/v2 v2.1.0 h1:v+yHJGAGnJtsIxtMpeEFxSSp+L+S2kWcBCQurP7J0Nw=
+github.com/mashedkeyboard/ybtools/v2 v2.1.0/go.mod h1:Wa2S3fUOmMHWO3y27EhASy/dRuVFMv5A2PtIjxYwAF8=
 github.com/mattn/go-colorable v0.0.0-20170327083344-ded68f7a9561 h1:isR/L+BIZ+rqODWYR/f526ygrBMGKZYFhaaFRDGvuZ8=
 github.com/mattn/go-colorable v0.0.0-20170327083344-ded68f7a9561/go.mod h1:9vuHe8Xs5qXnSaW/c/ABM9alt+Vo+STaOChaDxuIBZU=
 github.com/mattn/go-isatty v0.0.3 h1:ns/ykhmWi7G9O+8a448SecJU3nSMBXJfqQkl0upE1jI=
