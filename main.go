@@ -71,7 +71,7 @@ func main() {
 
 	currentTemplateRegex = regexp.MustCompile(regexBuilder.String())
 
-	parameters := params.Values{
+	ybtools.ForPageInQuery(params.Values{
 		"action":         "query",
 		"prop":           "revisions",
 		"generator":      "embeddedin",
@@ -81,83 +81,46 @@ func main() {
 		"rvprop":         "timestamp|content",
 		"rvslots":        "main",
 		"curtimestamp":   "1",
-	}
-
-	query := w.NewQuery(parameters)
-	for query.Next() {
-		pages := ybtools.GetPagesFromQuery(query.Resp())
-
-		curTS, err := query.Resp().GetString("curtimestamp")
+	}, func(pageTitle, pageContent, revTS, curTS string) {
+		revTSProcessed, err := time.Parse(time.RFC3339, revTS)
 		if err != nil {
-			ybtools.PanicErr("Failed to get current timestamp! Error was", err)
+			log.Println("Failed to parse last revision timestamp, so skipping the page. Error was", err)
+			return
 		}
 
-		if len(pages) > 0 {
-			for _, page := range pages {
-				pageTitle, err := page.GetString("title")
-				if err != nil {
-					log.Println("Failed to get title from page, so skipping it. Error was", err)
-					continue
-				}
+		// if it's been more than five hours since the last edit, and we can edit it
+		if time.Now().Sub(revTSProcessed).Hours() > 5 && ybtools.BotAllowed(pageContent) && ybtools.CanEdit() {
+			newPageContent := currentTemplateRegex.ReplaceAllString(pageContent, "")
+			if newPageContent == pageContent {
+				log.Println("newPageContent was the same as pageContent on page", pageTitle, "so ignoring")
+				return
+			}
 
-				pageRevisions, err := page.GetObjectArray("revisions")
-				if err != nil {
-					log.Println("Failed to get revisions array from page, so skipping it. Error was", err)
-					continue
-				}
-
-				pageContent, err := ybtools.GetMainSlotFromRevision(pageRevisions[0])
-				if err != nil {
-					log.Println("Failed to get content from page", pageTitle, ", so skipping it. Error was", err)
-					continue
-				}
-
-				lastTimestamp, err := pageRevisions[0].GetString("timestamp")
-				if err != nil {
-					log.Println("Failed to get timestamp from revision, so skipping the page. Error was", err)
-					continue
-				}
-				lastTimestampProcessed, err := time.Parse(time.RFC3339, lastTimestamp)
-				if err != nil {
-					log.Println("Failed to parse last revision timestamp, so skipping the page. Error was", err)
-					continue
-				}
-
-				// if it's been more than five hours since the last edit, and we can edit it
-				if time.Now().Sub(lastTimestampProcessed).Hours() > 5 && ybtools.BotAllowed(pageContent) && ybtools.CanEdit() {
-					newPageContent := currentTemplateRegex.ReplaceAllString(pageContent, "")
-					if newPageContent == pageContent {
-						log.Println("newPageContent was the same as pageContent on page", pageTitle, "so ignoring")
-						continue
+			err = w.Edit(params.Values{
+				"title":          pageTitle,
+				"text":           newPageContent,
+				"md5":            fmt.Sprintf("%x", md5.Sum([]byte(newPageContent))),
+				"summary":        "Auto-removing {{current}} - no edits in 5hrs+. The event may still be current, but [[Template:Current|the {{current}} template is designed only for articles which many editors are editing, and is usually up for less than a day]].",
+				"notminor":       "true",
+				"bot":            "true",
+				"basetimestamp":  revTS,
+				"starttimestamp": curTS,
+			})
+			if err == nil {
+				log.Println("Successfully removed current template from", pageTitle)
+			} else {
+				switch err.(type) {
+				case mwclient.APIError:
+					if err.(mwclient.APIError).Code == "editconflict" {
+						log.Println("Edit conflicted on page", pageTitle, "assuming it's still active and skipping")
+						return
 					}
 
-					err = w.Edit(params.Values{
-						"title":          pageTitle,
-						"text":           newPageContent,
-						"md5":            fmt.Sprintf("%x", md5.Sum([]byte(newPageContent))),
-						"summary":        "Auto-removing {{current}} - no edits in 5hrs+. The event may still be current, but [[Template:Current|the {{current}} template is designed only for articles which many editors are editing, and is usually up for less than a day]].",
-						"notminor":       "true",
-						"bot":            "true",
-						"basetimestamp":  lastTimestamp,
-						"starttimestamp": curTS,
-					})
-					if err == nil {
-						log.Println("Successfully removed current template from", pageTitle)
-					} else {
-						switch err.(type) {
-						case mwclient.APIError:
-							if err.(mwclient.APIError).Code == "editconflict" {
-								log.Println("Edit conflicted on page", pageTitle, "assuming it's still active and skipping")
-								continue
-							} else {
-								ybtools.PanicErr("API error raised, can't handle, so failing. Error was ", err)
-							}
-						default:
-							ybtools.PanicErr("Non-API error raised, can't handle, so failing. Error was ", err)
-						}
-					}
+					ybtools.PanicErr("API error raised, can't handle, so failing. Error was ", err)
+				default:
+					ybtools.PanicErr("Non-API error raised, can't handle, so failing. Error was ", err)
 				}
 			}
 		}
-	}
+	})
 }
