@@ -1,5 +1,7 @@
 cgt.name/pkg/go-mwclient v1.0.3 h1:ywIRG2KBMqINwct/yRH2t44djiMyIgqm0QCcRBBTqGA=
 cgt.name/pkg/go-mwclient v1.0.3/go.mod h1:sxgLqpaVbtOhM1KiAUPkkRdsE6au+E64Bq9a2GyAQdU=
+cgt.name/pkg/go-mwclient v1.2.0 h1:/ZMVH+wF62ITK0Uj1KnM1tPtE/AXYQabXe2cTA6JGSQ=
+cgt.name/pkg/go-mwclient v1.2.0/go.mod h1:sxgLqpaVbtOhM1KiAUPkkRdsE6au+E64Bq9a2GyAQdU=
 github.com/antonholmquist/jason v1.0.1-0.20180605105355-426ade25b261 h1:EhjUMUb2k4WYhEjGTMB3XmD7qf6IAmJQWPpE69sI+sI=
 github.com/antonholmquist/jason v1.0.1-0.20180605105355-426ade25b261/go.mod h1:+GxMEKI0Va2U8h3os6oiUAetHAlGMvxjdpAH/9uvUMA=
 github.com/cosiner/argv v0.0.0-20170225145430-13bacc38a0a5 h1:rIXlvz2IWiupMFlC45cZCXZFvKX/ExBcSLrDy2G0Lp8=
@@ -46,6 +48,8 @@ github.com/mashedkeyboard/ybtools/v2 v2.1.0 h1:v+yHJGAGnJtsIxtMpeEFxSSp+L+S2kWcB
 github.com/mashedkeyboard/ybtools/v2 v2.1.0/go.mod h1:Wa2S3fUOmMHWO3y27EhASy/dRuVFMv5A2PtIjxYwAF8=
 github.com/mashedkeyboard/ybtools/v2 v2.2.0 h1:lvJzbvxF+MOphjUbK9qQuUM7pj5As6zxi30S6xev7jI=
 github.com/mashedkeyboard/ybtools/v2 v2.2.0/go.mod h1:Wa2S3fUOmMHWO3y27EhASy/dRuVFMv5A2PtIjxYwAF8=
+github.com/mashedkeyboard/ybtools/v2 v2.2.2 h1:oy5zKrmVL+ZhI9V3Fgy9rbTpRbm1Fw3+IzjCpkiMZeI=
+github.com/mashedkeyboard/ybtools/v2 v2.2.2/go.mod h1:Wa2S3fUOmMHWO3y27EhASy/dRuVFMv5A2PtIjxYwAF8=
 github.com/mattn/go-colorable v0.0.0-20170327083344-ded68f7a9561 h1:isR/L+BIZ+rqODWYR/f526ygrBMGKZYFhaaFRDGvuZ8=
 github.com/mattn/go-colorable v0.0.0-20170327083344-ded68f7a9561/go.mod h1:9vuHe8Xs5qXnSaW/c/ABM9alt+Vo+STaOChaDxuIBZU=
 github.com/mattn/go-isatty v0.0.3 h1:ns/ykhmWi7G9O+8a448SecJU3nSMBXJfqQkl0upE1jI=
